@@ -14,5 +14,5 @@ class User(models.Model):
     username = models.CharField(max_length=30)
     firstName = models.CharField(max_length=30)
     lastName = models.CharField(max_length=30)
-    gender = models.ChoiceField(max_length=1, choices = GENDER_CHOICES)
+    gender = models.CharField(max_length=1, choices = GENDER_CHOICES)
     email = models.EmailField(max_length=254, unique=True)
