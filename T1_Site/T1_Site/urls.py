@@ -22,5 +22,6 @@ from SongProfileApp import views
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", views.home, name='homepage'),
-    path("loginSucesso/", views.loginComSucesso, name='loginsucesso')
+    path("loginSucesso/", views.loginComSucesso, name='loginsucesso'),
+    path("cadastroUsuario/", views.cadastroUsuario, name='cadastrousuario')
 ]
