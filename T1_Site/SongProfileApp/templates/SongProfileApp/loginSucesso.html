@@ -7,15 +7,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MySongProfileApp</title>
+    <link rel="stylesheet" href="{% static 'SongProfileApp/css/estilo.css' %}">
 </head>
 
 <body>
-    <div>
+        
+    <form method="post" action="{% url 'logout' %}" class="fixed-form">
 
-        <h1>Teste: Login feito com sucesso!</h1>
-        <form method="post" action=""></form>
+        {% csrf_token %}
+        <input type="submit" value="Logout" class="logout-btn">
 
-    </div>
+    </form>
+
+    
 </body>
 
 </html>
