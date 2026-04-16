@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login as auth_login, logout
+from .forms import CustomUserCreationForm
 from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
@@ -11,7 +12,7 @@ def cadastroUsuario(request):
 
     if request.method == 'POST':
 
-        formulario = UserCreationForm(request.POST)
+        formulario = CustomUserCreationForm(request.POST)
         if formulario.is_valid():
 
             formulario.save()
@@ -20,7 +21,7 @@ def cadastroUsuario(request):
     
     else:
 
-        formulario = UserCreationForm()
+        formulario = CustomUserCreationForm()
     
     contexto = {'form' : formulario,}
     return render(request, 'SongProfileApp/cadastroUsuario.html', contexto)
@@ -28,14 +29,17 @@ def cadastroUsuario(request):
 def loginComSucesso(request):
 
     if request.method == 'POST':
+        
         user_input = request.POST.get('username')
+        
         pass_input = request.POST.get('password')
-
+        
         # Utiliza a função authenticate para verificar as credenciais na tabela correta do Django
         user = authenticate(request, username=user_input, password=pass_input)
 
         if user is not None:
             auth_login(request, user) # Inicia a sessão do usuário no navegador
+            
             return render(request, 'SongProfileApp/loginSucesso.html')
         else:
             return render(request, 'SongProfileApp/index.html', {'error': 'Credenciais inválidas'})
