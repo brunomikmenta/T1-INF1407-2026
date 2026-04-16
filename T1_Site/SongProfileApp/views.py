@@ -25,6 +25,9 @@ def cadastroUsuario(request):
     contexto = {'form' : formulario,}
     return render(request, 'SongProfileApp/cadastroUsuario.html', contexto)
 
+def login(request):
+    return render(request, 'SongProfileApp/login.html')
+
 def loginComSucesso(request):
 
     if request.method == 'POST':
