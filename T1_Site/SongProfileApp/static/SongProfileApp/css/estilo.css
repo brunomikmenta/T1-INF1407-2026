@@ -1,11 +1,68 @@
 @charset "UTF-8";
 
 body {
+    display: flex;
+    flex-direction: column;
     margin: 0;
     padding: 0;
     height: 100vh;  /* Ocupa 100% da altura da tela */
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-image: linear-gradient(to bottom, #833030, #420909);
+    /*background-color: #833030;*/
+    color: white;
+}
+
+header {
+    display: flex;
+    flex-direction: row;
+    background-color: #993939;
+    padding: 15px;
+    border-radius: 0px 0px 10px 0px;
+    box-shadow: 0 4px 30px 10px rgba(35, 35, 35, 0.3);
+
+}
+
+nav#leftbar{
+    background-color: #b64b4b;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 10%;
+    align-items: left;
+    
+}
+
+nav#leftbar ul {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    height: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.btn-primary {
+    padding: 20px;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    font-size: 20px;
+    border-radius: 0px;
+    text-align: left;
+}
+
+.btn-primary:hover {
+    background-color: #702c2c;
+}
+
+.btn-primary:active {
+    background-color: #702c2c !important;
+}
+
+
+nav#leftbar ul li.login-component {
+    margin-top: auto;
 }
 
 .login-container{
@@ -24,11 +81,11 @@ body {
     width: 100%;
     max-width: 350px; /* Define um limite de largura */
     text-align: center;
+    color: black;
 }
 
 h1 {
     margin-bottom: 0.5rem;
-    color: #333;
     font-size: 1.8rem;
 }
 
