@@ -16,8 +16,10 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from SongProfileApp import views
+from django.contrib.auth.views import LogoutView, LoginView
+from django.urls.base import reverse_lazy
 
 
 urlpatterns = [
@@ -26,5 +28,7 @@ urlpatterns = [
     path("login/", views.login, name='login'),
     path("loginSucesso/", views.loginComSucesso, name='loginsucesso'),
     path("cadastroUsuario/", views.cadastroUsuario, name='cadastrousuario'), 
-    path("accounts/", include("django.contrib.auth.urls"))
+    path("perfil/", views.perfil, name='perfil'),
+    #path("accounts/", include("django.contrib.auth.urls"))
+    path('logout/', LogoutView.as_view(next_page=reverse_lazy('homepage')), name='logout'),
 ]
