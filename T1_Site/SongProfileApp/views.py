@@ -1,20 +1,30 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login as auth_login, logout
-from .forms import CustomUserCreationForm
+from django.core.mail import send_mail
+#from django.contrib.auth import authenticate, login as auth_login, logout
+from .forms import CustomUserCreationForm, EsqueciSenhaForm, NovaSenhaForm, ConfiguracaoEdicao
 from .models import User
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import user_passes_test
-
+#from django.contrib.auth.decorators import login_required
+#from django.contrib.auth.decorators import user_passes_test
+'''
+from django.http.response import HttpResponseRedirect
+from django.urls.base import reverse_lazy
+from django.views import View
+'''
 # Create your views here.
 
 def home(request):
     app_user_id = request.session.get('app_user_id')
+    reset = request.session.get('reset', False)
     app_user = None
 
     if app_user_id:
         app_user = User.objects.filter(id=app_user_id).first()
 
-    return render(request, 'SongProfileApp/index.html', {'app_user': app_user})
+    contexto = {
+        'app_user': app_user,
+        'reset': reset,
+    }
+    return render(request, 'SongProfileApp/index.html', contexto)
 
 def cadastroUsuario(request):
 
@@ -35,6 +45,9 @@ def cadastroUsuario(request):
     return render(request, 'SongProfileApp/cadastroUsuario.html', contexto)
 
 def login(request):
+    if request.session.get('reset') and request.session.get('reset_user_id'):
+        return redirect('novasenha')
+
     return render(request, 'SongProfileApp/login.html')
 
 
@@ -93,8 +106,115 @@ def perfil(request):
     app_user_id = request.session.get('app_user_id')
 
     if not app_user_id:
-        return render(request, 'SongProfileApp/login.html')
+        return redirect('login')
     
     app_user = User.objects.filter(id=app_user_id).first()
 
     return render(request, 'SongProfileApp/perfil.html', {'app_user': app_user})
+
+def configuracao(request):
+
+    app_user_id = request.session.get('app_user_id')
+
+    if not app_user_id:
+
+        return redirect('login')
+
+    usuario = User.objects.filter(id=app_user_id).first()
+
+    if request.method == 'POST':
+        formulario = ConfiguracaoEdicao(request.POST, instance=usuario)
+        if formulario.is_valid():
+            formulario.save()
+            return redirect('homepage')
+    else:
+        formulario = ConfiguracaoEdicao(instance=usuario)
+
+    contexto = {'form': formulario}
+    return render(request, 'SongProfileApp/configuracao.html', contexto)
+    
+def esqueciSenha(request):
+    if request.method == 'POST':
+        form = EsqueciSenhaForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            user = User.objects.filter(email=email).first()
+            
+            if user:
+                assunto = 'Recuperação de Senha - MySongProfileApp'
+                mensagem = f'Olá {user.username},\n\nFoi solicitado a recuperação de senha para sua conta.\n\nBasta apenas apertar no botão de login novamente que você poderá definir uma nova senha.\n\nAtenciosamente,\nEquipe MySongProfileApp'
+                remetente = 'pedro@bittencourt.com'
+                destinatario = [email]
+                
+                send_mail(assunto, mensagem, remetente, destinatario)
+        
+                request.session['reset_user_id'] = user.id
+                request.session['reset_user_email'] = user.email
+                request.session['reset'] = True
+
+                return redirect('homepage')
+            else:
+                contexto = {'form': form, 'erro': 'E-mail não encontrado no sistema.'}
+                
+                return render(request, 'SongProfileApp/esqueceuSenha.html', contexto)
+    else:
+        form = EsqueciSenhaForm()
+    
+    return render(request, 'SongProfileApp/esqueceuSenha.html', {'form': form})
+
+def novaSenha(request):
+    reset_user_id = request.session.get('reset_user_id')
+
+    if not reset_user_id:
+        return redirect('esquecisenha')
+
+    user = User.objects.filter(id=reset_user_id).first()
+    if not user:
+        request.session.pop('reset_user_id', None)
+        request.session.pop('reset_user_email', None)
+        request.session.pop('reset', None)
+        return redirect('esquecisenha')
+
+    if request.method == 'POST':
+        form = NovaSenhaForm(request.POST)
+        if form.is_valid():
+            user.senha = form.cleaned_data['nova_senha']
+            user.save()
+
+            request.session.pop('reset_user_id', None)
+            request.session.pop('reset_user_email', None)
+            request.session.pop('reset', None)
+
+            contexto = {'error': 'Senha alterada com sucesso. Faca login novamente.'}
+            return render(request, 'SongProfileApp/login.html', contexto)
+    else:
+        form = NovaSenhaForm()
+
+    contexto = {
+        'form': form,
+        'reset_email': request.session.get('reset_user_email'),
+    }
+    return render(request, 'SongProfileApp/loginNovaSenha.html', contexto)
+
+'''
+class atualizaContato(View):
+    def get(self, request, pk, *args, **kwargs):
+        usuario = User.objects.get(id=pk)
+        formulario = CustomUserCreationForm(instance=usuario)
+        contexto = {'form': formulario,}
+        return render(request, 'SongProfileApp/atualizaContato.html', contexto)
+
+    def post(self, request, pk, *args, **kwargs):
+        
+        usuario = User.objects.get(id=pk)
+        formulario = CustomUserCreationForm(request.POST, instance=usuario)
+        if formulario.is_valid():
+            usuario = formulario.save()
+            return HttpResponseRedirect(reverse_lazy('homepage'))
+        
+        else:
+
+            contexto = {'form': formulario,}
+            return render(request, 'SongProfileApp/atualizaContato.html', contexto)
+        
+'''

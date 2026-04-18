@@ -19,8 +19,8 @@ from django.contrib import admin
 from django.urls import path
 from SongProfileApp import views
 from django.contrib.auth.views import LogoutView, LoginView
+from django.contrib.auth.views import PasswordResetView, PasswordResetDoneView
 from django.urls.base import reverse_lazy
-
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -29,6 +29,10 @@ urlpatterns = [
     path("loginSucesso/", views.loginComSucesso, name='loginsucesso'),
     path("cadastroUsuario/", views.cadastroUsuario, name='cadastrousuario'), 
     path("perfil/", views.perfil, name='perfil'),
-    #path("accounts/", include("django.contrib.auth.urls"))
     path('logout/', LogoutView.as_view(next_page=reverse_lazy('homepage')), name='logout'),
+    path('configuracao/', views.configuracao, name='configuracao'),
+    #path('esqueciSenha/', PasswordResetView.as_view(template_name='SongProfileApp/esqueceuSenha.html', success_url=reverse_lazy('login')), name='esquecisenha'),
+    path('esqueciSenha/', views.esqueciSenha, name='esquecisenha'),
+    path('novaSenha/', views.novaSenha, name='novasenha'),
+    #path('configuracao/<int:id>/', views.atualizaContato.as_view(), name='atualizaContato'),
 ]

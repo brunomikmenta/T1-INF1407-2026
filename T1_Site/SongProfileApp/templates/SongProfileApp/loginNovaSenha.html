@@ -16,25 +16,26 @@
     <div class="login-container">
         <div class="login-box">
             <h1>MySongProfileApp</h1>
-            <h2>Login</h2>
-            {% if error %}
-                <p class="error-message">{{ error }}</p>
+            <h2>Login - Nova Senha</h2>
+            {% if reset_email %}
+                <p>Conta em recuperacao: {{ reset_email }}</p>
             {% endif %}
-            <form method="post" action="{% url 'loginsucesso' %}">
+           
+            <form method="post" action="">
                 {% csrf_token %}
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username"  required>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <a href="{% url 'cadastrousuario' %}">Não possui cadastro? Clique aqui</a>
-                <a href="{% url 'esquecisenha' %}">Esqueceu a senha?</a>
-                <button type="submit">Login</button>
+                <table class="formulario">
+
+                    {{ form.as_table }}
+                    <tr>
+                        <td></td>
+                        <td><input type="submit" value="Nova senha"></td>
+                    </tr>
+
+                </table>
             </form>     
         </div>
     </div>
     
-
-
 </body>
 
 </html>

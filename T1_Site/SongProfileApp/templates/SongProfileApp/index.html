@@ -15,8 +15,13 @@
         <h1>MySongProfileApp</h1>
     </header>
 
+    {% if reset_pending and not app_user %}
+        <p>Solicitacao de troca de senha identificada. Clique em Login para continuar.</p>
+    {% endif %}
+
     <div>
         <!--
+        Para teste
         <p>Username: {{ app_user.username }}</p>
         <p>Password: {{ app_user.senha }}</p>
         -->
@@ -28,7 +33,7 @@
             
             <li><a class="btn btn-primary" href="">Home</a></li>
             <li><a class="btn btn-primary" href="{% url 'perfil' %}">Perfil</a></li>
-            <li><a class="btn btn-primary" href="">Configurações</a></li>
+            <li><a class="btn btn-primary" href="{% url 'configuracao' %}">Configurações</a></li>
             <li class="login-component">
                 {% if not app_user %}
                     <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
