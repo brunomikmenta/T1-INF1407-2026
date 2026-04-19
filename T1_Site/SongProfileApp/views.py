@@ -12,9 +12,11 @@ from django.views import View
 '''
 # Create your views here.
 
+#Provavelmente vai tirar
 def home(request):
     app_user_id = request.session.get('app_user_id')
     reset = request.session.get('reset', False)
+    mensagem = request.session.pop('contexto', None)
     app_user = None
 
     if app_user_id:
@@ -23,6 +25,7 @@ def home(request):
     contexto = {
         'app_user': app_user,
         'reset': reset,
+        'mensagem': mensagem,
     }
     return render(request, 'SongProfileApp/index.html', contexto)
 
@@ -34,6 +37,7 @@ def cadastroUsuario(request):
         if formulario.is_valid():
 
             formulario.save()
+            request.session['contexto'] = 'Cadastro realizado com sucesso. Faça login para acessar sua conta.'
 
             return redirect('homepage')
     
@@ -64,6 +68,7 @@ def loginComSucesso(request):
     if user is not None:
         request.session['app_user_id'] = user.id
         request.session['app_username'] = user.username
+        request.session['contexto'] = 'Login bem-sucedido. Bem-vindo, {}!'.format(user.username)
         return redirect('homepage')
     else:
         contexto = {
@@ -99,6 +104,7 @@ def loginComSucesso(request):
 
 def logout(request):
     request.session.flush()
+    request.session['contexto'] = 'Logout realizado com sucesso.'
     return redirect('homepage')
 
 def perfil(request):
@@ -126,6 +132,7 @@ def configuracao(request):
         formulario = ConfiguracaoEdicao(request.POST, instance=usuario)
         if formulario.is_valid():
             formulario.save()
+            request.session['contexto'] = 'Configurações atualizadas com sucesso.'
             return redirect('homepage')
     else:
         formulario = ConfiguracaoEdicao(instance=usuario)
@@ -151,6 +158,7 @@ def esqueciSenha(request):
                 request.session['reset_user_id'] = user.id
                 request.session['reset_user_email'] = user.email
                 request.session['reset'] = True
+                request.session['contexto'] = 'E-mail de recuperação de senha enviado. Verifique sua caixa de entrada.'
 
                 return redirect('homepage')
             else:

@@ -8,6 +8,32 @@
     <title>MySongProfileApp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'SongProfileApp/css/estilo.css' %}">
+    <style>
+        .nova-senha-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .field-group label {
+            font-weight: 400;
+        }
+
+        .nova-senha-form .form-control {
+            width: 100%;
+        }
+
+        .nova-senha-form button[type="submit"] {
+            width: 100%;
+        }
+
+    </style>
 </head>
 
 
@@ -16,25 +42,41 @@
     <div class="login-container">
         <div class="login-box">
             <h1>MySongProfileApp</h1>
-            <h2>Login - Nova Senha</h2>
+            <h2>Nova Senha</h2>
             {% if reset_email %}
                 <p>Conta em recuperacao: {{ reset_email }}</p>
             {% endif %}
            
-            <form method="post" action="">
+            <form method="post" action="" class="nova-senha-form">
                 {% csrf_token %}
-                <table class="formulario">
 
-                    {{ form.as_table }}
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" value="Nova senha"></td>
-                    </tr>
+                <div class="field-group">
+                    <label for="{{ form.nova_senha.id_for_label }}">Nova senha:</label>
+                    {{ form.nova_senha }}
+                </div>
 
-                </table>
+                <div class="field-group">
+                    <label for="{{ form.confirmar_senha.id_for_label }}">Confirmar nova senha:</label>
+                    {{ form.confirmar_senha }}
+                </div>
+
+                <button type="submit">Nova senha</button>
             </form>     
         </div>
     </div>
+
+    {% if form.errors %}
+        <div class="error-toast" role="alert" aria-live="assertive">
+            {% for error in form.non_field_errors %}
+                <div>{{ error }}</div>
+            {% endfor %}
+            {% for field in form %}
+                {% for error in field.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    {% endif %}
     
 </body>
 

@@ -15,10 +15,6 @@
         <h1>MySongProfileApp</h1>
     </header>
 
-    {% if reset_pending and not app_user %}
-        <p>Solicitacao de troca de senha identificada. Clique em Login para continuar.</p>
-    {% endif %}
-
     <div>
         <!--
         Para teste
@@ -45,6 +41,11 @@
 
     </nav>
 
+    {% if mensagem %}
+        <div class="message-toast" role="status" aria-live="polite">
+            {{ mensagem }}
+        </div>
+    {% endif %}
 
 </body>
 

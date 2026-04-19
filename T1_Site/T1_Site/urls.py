@@ -29,7 +29,7 @@ urlpatterns = [
     path("loginSucesso/", views.loginComSucesso, name='loginsucesso'),
     path("cadastroUsuario/", views.cadastroUsuario, name='cadastrousuario'), 
     path("perfil/", views.perfil, name='perfil'),
-    path('logout/', LogoutView.as_view(next_page=reverse_lazy('homepage')), name='logout'),
+    path('logout/', views.logout, name='logout'),
     path('configuracao/', views.configuracao, name='configuracao'),
     #path('esqueciSenha/', PasswordResetView.as_view(template_name='SongProfileApp/esqueceuSenha.html', success_url=reverse_lazy('login')), name='esquecisenha'),
     path('esqueciSenha/', views.esqueciSenha, name='esquecisenha'),
