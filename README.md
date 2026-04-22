@@ -5,6 +5,9 @@ Componentes do Grupo: Bruno Miksucas Pimenta (2110717) e Pedro Bittencourt (2111
 Nome do Projeto: MySongProfileApp
 
 O MySongProfileApp é um website onde o usuário pode criar e editar uma lista com as top 5 músicas favoritas dele.
+O website foi hosteado na plataforma On Render.
+
+Para acessar o site, basta acessar o link: https://t1-inf1407-2026-j4pm.onrender.com
 
 O MySongProfileApp possui três telas principais:
  - Home
