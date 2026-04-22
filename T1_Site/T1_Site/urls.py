@@ -34,5 +34,8 @@ urlpatterns = [
     #path('esqueciSenha/', PasswordResetView.as_view(template_name='SongProfileApp/esqueceuSenha.html', success_url=reverse_lazy('login')), name='esquecisenha'),
     path('esqueciSenha/', views.esqueciSenha, name='esquecisenha'),
     path('novaSenha/', views.novaSenha, name='novasenha'),
+    path('criaLista/', views.createSongListView, name='crialista'),
+    path('editSong/<int:song_id>/', views.edit_song, name='editsong'),
+    path('deleteSong/<int:song_id>/', views.delete_song, name='deletesong'),
     #path('configuracao/<int:id>/', views.atualizaContato.as_view(), name='atualizaContato'),
 ]

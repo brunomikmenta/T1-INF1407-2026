@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Música - MySongProfileApp</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'SongProfileApp/css/estilo.css' %}">
+<body>
+    
+    <header>
+        <h1>MySongProfileApp</h1>
+    </header>
+
+    <nav id="leftbar">
+        <ul>
+            
+            <li><a class="btn btn-primary" href="{% url 'homepage' %}">Home</a></li>
+            <li><a class="btn btn-primary" href="{% url 'perfil' %}">Perfil</a></li>
+            <li><a class="btn btn-primary" href="{% url 'configuracao' %}">Configurações</a></li>
+            <li class="login-component">
+                {% if not app_user %}
+                    <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Editar Música</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_name" class="form-label">Nome da Música</label>
+                        {{ form.name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_artist" class="form-label">Artista</label>
+                        {{ form.artist }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_gender" class="form-label">Gênero</label>
+                        {{ form.gender }}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-secondary">Salvar Alterações</button>
+                    <a href="{% url 'perfil' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,25 +1,23 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MySongProfileApp</title>
+    <title>Deletar Música - MySongProfileApp</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'SongProfileApp/css/estilo.css' %}">
-</head>
-
 <body>
+    
     <header>
         <h1>MySongProfileApp</h1>
     </header>
 
-
     <nav id="leftbar">
         <ul>
             
-            <li><a class="btn btn-primary" href="{% url 'homepage'}">Home</a></li>
+            <li><a class="btn btn-primary" href="{% url 'homepage' %}">Home</a></li>
             <li><a class="btn btn-primary" href="{% url 'perfil' %}">Perfil</a></li>
             <li><a class="btn btn-primary" href="{% url 'configuracao' %}">Configurações</a></li>
             <li class="login-component">
@@ -33,17 +31,23 @@
 
     </nav>
 
-    <div class=home-text-container>
-        <h1>Seja bem vindo ao MySongProfileApp!</h1><br>
-        <h2><a href=" {% url 'perfil' %}">Comece agora!</a><h2>
-    <div>
-
-    {% if mensagem %}
-        <div class="message-toast" role="status" aria-live="polite">
-            {{ mensagem }}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <h2>Deletar Música</h2>
+                <div class="alert alert-warning" role="alert">
+                    <p>Tem certeza que deseja deletar a música <strong>{{ song.name }}</strong> de {{ song.artist }}?</p>
+                    <p>Esta ação não pode ser desfeita.</p>
+                </div>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+                    <a href="{% url 'perfil' %}" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
         </div>
-    {% endif %}
+    </div>
 
 </body>
-
 </html>

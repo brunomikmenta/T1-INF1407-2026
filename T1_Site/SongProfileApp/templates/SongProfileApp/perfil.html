@@ -1,18 +1,61 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MySongProfileApp</title>
-    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> -->
-</head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'SongProfileApp/css/estilo.css' %}">
 <body>
     
-    <h1>Perfil do Usuário</h1>
-    <div>
+    <header>
+        <h1>MySongProfileApp</h1>
+    </header>
 
-        <p>Username: {{ app_user.username }}</p>
-        <p>Email: {{ app_user.email }}</p>
+    <nav id="leftbar">
+        <ul>
+            
+            <li><a class="btn btn-primary" href="{% url 'homepage' %}">Home</a></li>
+            <li><a class="btn btn-primary" href="{% url 'perfil' %}">Perfil</a></li>
+            <li><a class="btn btn-primary" href="{% url 'configuracao' %}">Configurações</a></li>
+            <li class="login-component">
+                {% if not app_user %}
+                    <a class="btn btn-primary" href="{% url 'login' %}">Login</a>
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
+                {% endif %}
+            </li>
+        </ul>
+
+    </nav>
+
+    <div class="profile-info-container">
+        <h1>Perfil de {{app_user.username}}</h1>
+        <div class="profile-songlist-container">
+            <h2>Suas Músicas Favoritas:</h2>
+            {% if songlist %}
+                <table class='songlist-table'>
+                    <tr><th></th><th>Título</th><th>Artista</th><th>Gênero</th><th>Ações Disponíveis</th>
+                {% for song in songlist.get_songs %}
+                    <tr>
+                        <td># {{ forloop.counter }}</td><td><strong>{{ song.name }}</strong></td><td>{{ song.artist }}</td><td>{{ song.gender }}</td>
+                        <td><a href="{% url 'editsong' song.id %}">Editar</a> | <a href="{% url 'deletesong' song.id %}">Deletar</a></td>
+                    </tr>
+
+                {% empty %}
+                    <p>Nenhuma música adicionada ainda. <a href="{% url 'crialista' %}">Crie uma lista</a></p>
+                {% endfor %}
+                </table>
+                <br>
+                {% if songlist.get_songs|length > 0 and songlist.get_songs|length < 5 %}
+                    <p>Você pode adicionar mais músicas à sua lista. <a href="{% url 'crialista' %}">Adicionar músicas</a></p>
+                {% endif %}
+            {% else %}
+                <p>Nenhuma música adicionada ainda. <a href="{% url 'crialista' %}">Crie uma lista</a></p>
+            {% endif %}
+        </div>
         
     </div>
 
